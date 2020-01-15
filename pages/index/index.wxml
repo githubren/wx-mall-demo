@@ -1,0 +1,6 @@
+<view class="swiper-container">
+  <swiper indicator-dots="true" indicator-active-color="#000" autoplay circular></swiper>
+  <swiper-item wx:for="{{banners}}" wx:key="id">
+    <image mode="aspectFill" bindtap="tapBanner" data-id="{{item.businessId}}" src="{{item.picUrl}}" />
+  </swiper-item>
+</view>
