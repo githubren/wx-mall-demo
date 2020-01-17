@@ -1,6 +1,76 @@
+<!-- banner分区 -->
 <view class="swiper-container">
-  <swiper indicator-dots="true" indicator-active-color="#000" autoplay circular></swiper>
-  <swiper-item wx:for="{{banners}}" wx:key="id">
-    <image mode="aspectFill" bindtap="tapBanner" data-id="{{item.businessId}}" src="{{item.picUrl}}" />
-  </swiper-item>
+  <swiper indicator-dots="true" indicator-active-color="#000" autoplay circular interval="3500" duration="500">
+    <swiper-item wx:for="{{banners}}" wx:key="id">
+      <image mode="aspectFill" bindtap="tapBanner" data-id="{{item.businessId}}" src="{{item.picUrl}}" />
+    </swiper-item>
+  </swiper>
+  <!-- 搜索框 -->
+  <view class="search">
+    <input type="text" placeholder="请输入搜索关键词" value="{{name}}" bindinput="bindinput" bindconfirm="bindconfirm"></input>
+    <image src="/images/icon/search.svg"></image>
+  </view>
+</view>
+<!-- notice分区 -->
+<view class="notice-box" wx:if="{{noticeList}}">
+  <view class="notice">
+    <image class="notice_icon" src="/images/notice.png"></image>
+    <swiper class="notice_swiper" vertical autoplay circular>
+      <navigator wx:for-items="{{noticeList.dataList}}" wx:key="id" url="/pages/notice/show?id={{item.id}}">
+        <swiper-item>
+          <view class="notice_itemr">{{item.title}}</view>
+        </swiper-item>
+      </navigator>
+    </swiper>
+  </view>
+  <view class="more">
+    <navigator url="/pages/notice/index">更多</navigator>
+  </view>
+</view>
+<!-- 类别分区 -->
+<view class="category-box">
+  <view class="category-list" wx:for="{{categories}}" wx:key="id">
+    <view class="category-colum {{activeCategoryId == item.id ? 'type-item-on' : ''}}" bindtap="tabClick" id="{{item.id}}">
+      <image mode="aspectFill" class="category-imgbox" src="{{item.icon}}"></image>
+      <view class="category-title">{{item.name}}</view>
+    </view>
+  </view>
+</view>
+<view class="container">
+  <block wx:for="{{categories}}" wx:key="id" wx:if="{{item.goods}}">
+    <view class="category-goods-title">
+      <view class="weui-panel__hd">{{item.name}}</view>
+      <view class="more">
+        <navigator url="/pages/goods/list?categoryId={{item.id}}">更多</navigator>
+      </view>
+    </view>
+    <view class="goods-container">
+      <view class="goods-box" wx:for-items="{{item.goods}}" wx:key="id" bindtap="toDetailsTap" data-id="{{item.id}}">
+        <view class="img-box">
+          <image src="{{item.pic}}_m" class="image" mode="aspectFill" lazy-load="true"></image>
+        </view>
+        <view class="goods-title">{{item.name}}</view>
+        <view style="display:flex;">
+          <view class="goods-price">¥ {{item.minPrice}}</view>
+          <view wx:if="{{item.originalPrice && item.originalPric > 0}}" class="goods-price" style='color:#aaa;text-decoration:line-through'>¥ {{item.originalPric}}</view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <view class="weui-loadmore weui-loadmore_line" wx:if="{{goodsRecommend.length > 0 && activeCategoryId == 0}}">
+  <view class="weui-loadmore__tips weui-loadmore__tips_in-line">爆品推荐</view>
+  </view>
+  <view class="goods-container" wx:if="{{goodsRecommend.length > 0 && activeCategoryId == 0}}">
+  <view class="good-box" wx:for-items="{{goodsRecommend}}" wx:key="*this" bindtap="toDetailsTap" data-id="{{item.id}}">
+  <view class="img-box">
+  <image src="{{item.pic}}" mode="aspectFill" class="image" lazy-load></image>
+  </view>
+  <text class="goods-title">{{item.name}}</text>
+  <view style="display:flex;">
+  <text class="goods-price">¥ {{item.minPrice}}</text>
+  <text wx:if="{{item.originalPrice && item.originalPrice > 0}}" class="goods-price"
+  style='color:#aaa;text-decoration:line-through'>¥ {{item.originalPrice}}</text>
+  </view>
+  </view>
+  </view>
 </view>
